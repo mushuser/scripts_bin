@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # sudo systemctl list-units -t mount
-
 import os
 import re
 from datetime import datetime, timedelta
