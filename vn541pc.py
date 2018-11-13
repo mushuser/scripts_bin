@@ -14,7 +14,6 @@
 # 
 # [Install]
 # WantedBy=media-user-VN_541PC.mount
-# 
 
 import os
 import re
