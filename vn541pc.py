@@ -33,6 +33,29 @@ def internet_on():
     except urllib2.URLError as err: 
         return False
 
+
+def check_files(paths):
+    os.chdir(GD_PATH)
+    files = []
+    
+    output = ""
+    for path in paths:
+        print "Checking %s files" % path
+        GD_CMD_LIST_CHECK=[GDRIVE_PATH, "list", path]
+        output = output + subprocess.check_output(GD_CMD_LIST_CHECK)
+
+    for filename in os.listdir(DEST_DIR):
+        fullf = os.path.join(DEST_DIR, filename)
+        if filename.lower().endswith(ext) and (len(filename)==len("20181113_0917_0691.WMA")):
+            if (filename not in output):
+                files.append(filename)
+
+    for f in files:
+        print "pushing: %s" % f
+
+    return files
+
+
 MEDIA_DIR="/media/user/VN_541PC/RECORDER/"
 MEDIA_SUBDIRS=['MEMO', 'TALK', 'MUSIC', 'LP']
 DEST_DIR="/home/user/VN541PC/"
@@ -69,26 +92,16 @@ if not internet_on():
 # push to drive
 GDRIVE_PATH="/home/user/gopath/bin/drive"
 GD_PATH=DEST_DIR
-GD_CHECK_PATH=u"錄音/WMA_COMPLETED"
-GD_BACKUP_PATH=u"錄音/WMA"
-GD_CMD_LIST_CHECK=[GDRIVE_PATH, "list", GD_CHECK_PATH]
+GD_BACKUP_PATH="錄音/WMA"
+GD_CHECK_PATHS=["錄音/WMA_COMPLETED", "錄音/WMA_OVERSIZED", GD_BACKUP_PATH]
 GD_CMD_PUSH_FILES=[GDRIVE_PATH, "push", "-no-prompt", "-destination", GD_BACKUP_PATH]
 
-os.chdir(GD_PATH)
-output = subprocess.check_output(GD_CMD_LIST_CHECK)
-
-files = []
-
-for filename in os.listdir(DEST_DIR):
-    fullf = os.path.join(DEST_DIR, filename)
-    if filename.lower().endswith(ext) and (len(filename)==len("20181113_0917_0691.WMA")):
-        if filename not in output:
-            print "pushing: %s" % filename
-            files.append(filename)
+files = check_files(GD_CHECK_PATHS)
 
 if len(files) > 0:
     cmd = GD_CMD_PUSH_FILES + files
     os.chdir(GD_PATH)
     output = subprocess.check_output(cmd)
-    print output
     print "%d files pushed" % len(files)
+else:
+    print "no files pushed"
