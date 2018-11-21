@@ -14,7 +14,9 @@
 # 
 # [Install]
 # WantedBy=media-user-VN_541PC.mount
-
+#
+# /etc/fstab
+# LABEL=VN_541PC    /media/user/VN_541PC       auto noauto,x-systemd.automount 0 2
 
 import os
 import re
