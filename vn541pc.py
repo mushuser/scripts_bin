@@ -17,7 +17,7 @@
 #
 # /etc/fstab
 # LABEL=VN_541PC    /media/user/VN_541PC       auto noauto,x-systemd.automount 0 2
-
+#       70CF-9AA7   
 import os
 import re
 from datetime import datetime, timedelta
@@ -104,6 +104,8 @@ if len(files) > 0:
     cmd = GD_CMD_PUSH_FILES + files
     os.chdir(GD_PATH)
     output = subprocess.check_output(cmd)
-    print "%d files pushed" % len(files)
+    msg = "%d files pushed" % len(files)
 else:
-    print "no files pushed"
+    msg = "no files pushed"
+
+print msg
